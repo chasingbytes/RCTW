@@ -28,19 +28,19 @@ st.markdown("------------")
 
 # Center the title (HTML and CSS)
 st.markdown("<h1 style='text-align: center;'>RTCW Daily Predictor</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Please enter appropriate weather information and click Predict to plan your day!</p>", unsafe_allow_html=True)
-prev_day_count = st.number_input("Please Enter Previous day's car count (Can be approximate)", 0, 1000, 500)
+st.markdown("<p style='text-align: center;'>Please enter appropriate weather information on the sidebar and click Predict to plan your day!</p>", unsafe_allow_html=True)
+# prev_day_count = st.number_input("Please Enter Previous day's car count (Can be approximate)", 0, 1000, 500)
 st.markdown("-------------")
 
 st.sidebar.header("Enter Weather Data")
+prev_day_count = st.sidebar.number_input("Enter Previous day's car count (Find this on Vehicle Performance)", 0, 1000, 500)
 temp = st.sidebar.number_input("Temperature (°F)", value=75)
 humidity = st.sidebar.number_input("Humidity (%)", value=50)
 precip = st.sidebar.number_input("Precipitation (inches)", value=0.1)
 precipcover = st.sidebar.slider("Chance of Rain (%)", 0, 100, 10)
-cloudcover = st.sidebar.slider("Cloud Cover (%)", 0, 100, 50)
 uvindex = st.sidebar.number_input("UV Index", value=5)
 dayofweek = st.sidebar.selectbox("Day of the Week", list(range(7)), format_func=lambda x: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][x])
-conditions = st.sidebar.selectbox("Weather Conditions", le.classes_)
+conditions = st.sidebar.selectbox("Current Weather Conditions", le.classes_)
 AQI = st.sidebar.slider("Air Quality Index", 0, 100, 30)
 
 # Encode conditions using LabelEncoder
@@ -49,6 +49,7 @@ conditions_encoded = le.transform([conditions])[0]
 # Approximate previous day rain & counts
 prev_day_rain = precip  # Use today's precipitation (Approx)
 prev_day_count = prev_day_count # User enters car count for prev day
+cloudcover = precip
 
 # Create input to match trained model
 input_data = pd.DataFrame({
@@ -78,15 +79,21 @@ else:  # Saturday–Sunday (5,6)
 
 multiplier = 1.0 # Default
 # Penalize rainy days for better accuracy
-if precipcover > 30 or (conditions == "Rain, Partially Cloudy" or conditions == "Rain"):
+if precipcover > 40 and (conditions == "Rain, Partially Cloudy" or conditions == "Rain"):
     multiplier =  0.4
+if precipcover > 20 and (conditions == "Partially Cloudy" or conditions == "Overcast" or conditions == "Rain, Overcast"):
+    multiplier = 0.625
+if conditions == "Rain" or conditions == "Rain, Overcast" or conditions == "Rain, Partially Cloudy":
+    multiplier = 0.4
+if conditions == "Overcast" or conditions == "Partially Cloudy":
+    multiplier = 0.7
 
 # Make prediction
 if st.sidebar.button("Predict"):
-    prediction = xgb_model.predict(input_data)[0]
-    members = prediction*0.60
+    prediction = xgb_model.predict(input_data)[0] * multiplier
+    members = prediction * 0.60
     members = members * multiplier
-    conversion = members*0.10
+    conversion = members * 0.10
     st.subheader(f"Car Wash Count for the day (Retail & Members): {int(prediction)} cars")
     st.subheader(f"Predicted FS washes: {int(prediction)*FSmultiplier :.0f} cars")
     st.markdown("------------------------")
@@ -102,4 +109,4 @@ if st.sidebar.button("Predict"):
     st.subheader("Recommended Distribution")
     st.write(f"Opening Greeter: **{math.ceil(conversion // 2)}** new members")
     st.write(f"Closing Greeter: **{math.ceil(conversion // 2)}** new members")
-    st.write(f"Sales Supervisor/Manager: **{math.ceil(leftover)}** new members")
+    st.write(f"Sales Supervisor/Manager: **{math.ceil(leftover)}** new members")rs")
