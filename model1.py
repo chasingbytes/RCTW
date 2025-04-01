@@ -109,4 +109,4 @@ if st.sidebar.button("Predict"):
     st.subheader("Recommended Distribution")
     st.write(f"Opening Greeter: **{math.ceil(conversion // 2)}** new members")
     st.write(f"Closing Greeter: **{math.ceil(conversion // 2)}** new members")
-    st.write(f"Sales Supervisor/Manager: **{math.ceil(leftover)}** new members")rs")
+    st.write(f"Sales Supervisor/Manager: **{math.ceil(leftover)}** new members")
