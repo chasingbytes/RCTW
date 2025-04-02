@@ -35,7 +35,9 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 # Streamlit UI
-st.image("RisingTide.jpg", use_container_width=False)
+left_co, cent_co, last_co = st.columns(3)
+with cent_co:
+    st.image("RisingTide.jpg", use_container_width=False)
 st.markdown("------------")
 
 # Center the title (HTML and CSS)
