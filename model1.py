@@ -26,7 +26,14 @@ xgb_model = joblib.load('xgb_model2.pkl')  # Load the trained model
 # path settings
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 css_file = current_dir / "main.css"
-
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 # Streamlit UI
 st.image("RisingTide.jpg", use_container_width=False)
 st.markdown("------------")
