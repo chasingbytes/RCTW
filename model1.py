@@ -97,16 +97,19 @@ if st.sidebar.button("Predict"):
     st.subheader(f"Car Wash Count for the day (Retail & Members): {int(prediction)} cars")
     st.subheader(f"Predicted FS washes: {int(prediction)*FSmultiplier :.0f} cars")
     st.markdown("------------------------")
-    st.subheader(f"Predicted Potential Members: {members:.0f} cars")
-    st.subheader(f"Conversion Goal: {conversion:.0f} new members")
+    st.subheader(f":blue_car: Predicted Potential Members: {members:.0f} cars :blue_car:")
+    st.subheader(f":zap: Conversion Goal: {conversion:.0f} new members :zap:")
+    st.markdown("-----------------------")
+    st.subheader(f":star: Greeters should aim for {(conversion / 11):.0f} new members per hour :star:")
     st.markdown("-----------------------")
 
     # Greeter split
     st.header("Shift Split for Predicted New Members")
+    greeter = math.ceil(conversion // 2)
     leftover = conversion % 2
 
     # Display greeter result
     st.subheader("Recommended Distribution")
-    st.write(f"Opening Greeter: **{math.ceil(conversion // 2)}** new members")
-    st.write(f"Closing Greeter: **{math.ceil(conversion // 2)}** new members")
+    st.write(f"Opening Greeter: **{greeter}** new members")
+    st.write(f"Closing Greeter: **{math.ceil(greeter}** new members")
     st.write(f"Sales Supervisor/Manager: **{math.ceil(leftover)}** new members")
