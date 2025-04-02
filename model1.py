@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 import joblib
+from pathlib import Path
 
 # Load historical data
 data = pd.read_csv('modelData.csv')
@@ -21,6 +22,10 @@ data['conditions'] = le.fit_transform(data['conditions'])
 
 # Load trained XGBoost model
 xgb_model = joblib.load('xgb_model2.pkl')  # Load the trained model
+
+# path settings
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+css_file = current_dir / "main.css"
 
 # Streamlit UI
 st.image("RisingTide.jpg", use_container_width=False)
