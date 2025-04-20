@@ -87,9 +87,9 @@ input_data = pd.DataFrame({
 })
 # Calculate FS count from car count prediction (Weekends usually busier)
 if dayofweek < 4:  # Monday–Friday (0–4)
-    FSmultiplier = 0.11
+    FSmultiplier = 0.09
 else:  # Saturday–Sunday (5,6)
-    FSmultiplier = 0.18
+    FSmultiplier = 0.17
 
 multiplier = 1.0 # Default
 # Penalize rainy days for better accuracy
@@ -105,7 +105,7 @@ if conditions == "Overcast" or conditions == "Partially Cloudy":
 # Make prediction
 if st.sidebar.button("Predict"):
     prediction = xgb_model.predict(input_data)[0] * multiplier
-    members = prediction * 0.60
+    members = prediction * 0.45
     members = members * multiplier
     conversion = members * 0.10
     st.subheader(f"Car Wash Count for the day (Retail & Members): {int(prediction)} cars")
