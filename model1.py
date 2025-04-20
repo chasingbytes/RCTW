@@ -23,7 +23,7 @@ data['conditions'] = le.fit_transform(data['conditions'])
 # Load trained XGBoost model
 xgb_model = joblib.load('xgb_model2.pkl')  # Load the trained model
 
-st.set_page_config(page_title="Sales Predictor", page icon="🚘")
+st.set_page_config(page_title="Sales Predictor", page_icon="🚘")
 # path settings
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 css_file = current_dir / "main.css"
